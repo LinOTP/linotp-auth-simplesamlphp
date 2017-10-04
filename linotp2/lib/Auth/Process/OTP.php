@@ -19,6 +19,11 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
 	private $linotpserver;
 	
 	/**
+	 * The attribute we should use in the $state['Attributes'] array to look up LinOTP username
+	 */
+	private $linotpuidattribute;
+
+	/**
 	 * If the sslcert should be checked
 	 */
 	private $sslverifyhost;
@@ -54,6 +59,7 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
 
         $cfg = \SimpleSAML_Configuration::loadFromArray($config, 'linotp2:OTP');
         $this->linotpserver= $cfg->getString('linotpserver');
+        $this->linotpuidattribute = $cfg->getString('linotpuidattribute', 'uid');
         $this->sslverifyhost= $cfg->getBoolean('sslverifyhost', false);
         $this->sslverifypeer= $cfg->getBoolean('sslverifypeer', false);
         $this->realm = $cfg->getString('realm', '');
@@ -77,14 +83,23 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
     {
         $session = \SimpleSAML_Session::getSessionFromRequest();
         $this->authid = $state['Source']['auth'];
+        $key_id = $session->getData('linotp2:auth', $this->authid);
         $attrs = &$state['Attributes'];
 
+        // check for previous auth
+        if (!is_null($key_id) && in_array($key_id, $attrs[$this->linotpuidattribute])) {
+            // we were already authenticated using a valid yubikey
+            SimpleSAML_Logger::info('Reusing previous OTP authentication with data "'.$key_id.'".');
+            return;
+        }
+
         $state['linotp2:otp'] = array(
-        	'linotpserver' => $this->linotpserver,
-        	'sslverifyhost' => $this->sslverifyhost,
-        	'sslverifypeer' => $this->sslverifypeer,
-        	'realm' => $this->realm,
-        	'attributemap' => $this->attributemap,
+            'linotpserver' => $this->linotpserver,
+            'linotpuidattribute' => $this->linotpuidattribute,
+            'sslverifyhost' => $this->sslverifyhost,
+            'sslverifypeer' => $this->sslverifypeer,
+            'realm' => $this->realm,
+            'attributemap' => $this->attributemap,
             'authID' => $this->authid,
             'self' => $this,
         );
@@ -116,9 +131,7 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
 
         $otp = strtolower($otp);
 
-        // TODO: change this to use $state['Attributes']['username']
-        // 'UserID' is deprecated
-        $username = $state['UserID'];
+        $username = $state['Attributes'][$cfg['linotpuidattribute']][0];
         assert('is_string($otp)');
         assert('is_string($username)');
 
@@ -127,8 +140,8 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
         $escPassword = urlencode($otp);
         $escUsername = urlencode($username);
 
-        $url = $this->linotpserver . '/validate/samlcheck?user='.$escUsername
-        .'&pass=' . $escPassword . '&realm=' . $this->realm;
+        $url = $cfg['linotpserver'] . '/validate/samlcheck?user='.$escUsername
+        .'&pass=' . $escPassword . '&realm=' . $cfg['realm'];
 
         //throw new Exception("url: ". $url);
         SimpleSAML_Logger::debug("LinOTP2 URL: " . $url);
@@ -136,12 +149,12 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, TRUE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        if ($this->sslverifyhost) {
+        if ($cfg['sslverifyhost']) {
         	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
         } else {
         	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         }
-        if ($this->sslverifypeer) {
+        if ($cfg['sslverifypeer']) {
         	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         } else {
         	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);

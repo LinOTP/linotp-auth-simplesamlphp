@@ -1,8 +1,8 @@
 {
   "invalid_state": {
     "en": "There was an unexpected error while trying to verify your OTP."
-  }
+  },
   "invalid_otp": {
     "en": "The one time password provided is not valid. Please make sure you used a registered device."
-  },
+  }
 }
