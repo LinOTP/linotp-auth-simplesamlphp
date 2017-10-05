@@ -11,7 +11,7 @@ $this->includeAtTemplateBase('includes/header.php');
         <p><?php echo $this->t('{linotp2:otp:intro}'); ?></p>
         <p><input id="otp" type="text" tabindex="2" name="otp"
                   style="border: 1px solid #ccc; background: #eee; padding: .5em; font-size: medium; width: 70%;
-                         color: #aaa; cursor: not-allowed" />
+                         color: #000" />
         </p>
         <?php
         foreach ($this->data['params'] as $name => $value) {
