@@ -1,5 +1,5 @@
 {
-    "name": "codeenigma/linotp-auth-simplesamlphp",
+    "name": "codeenigma/simplesamlphp-module-linotp-auth-simplesamlphp",
     "description": "A SimpleSAMLphp module that adds support for LinOTP as an authentication source.",
     "type": "simplesamlphp-module",
     "keywords": [ "simplesamlphp", "linotp", "otp" ],
