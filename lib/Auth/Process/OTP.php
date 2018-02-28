@@ -89,7 +89,7 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
         // check for previous auth
         if (!is_null($key_id) && in_array($key_id, $attrs[$this->linotpuidattribute])) {
             // we were already authenticated using a valid yubikey
-            SimpleSAML_Logger::info('Reusing previous OTP authentication with data "'.$key_id.'".');
+            SimpleSAML\Logger::info('Reusing previous OTP authentication with data "'.$key_id.'".');
             return;
         }
 
@@ -104,7 +104,7 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
             'self' => $this,
         );
 
-        SimpleSAML_Logger::debug('Initiating LinOTP authentication.');
+        SimpleSAML\Logger::debug('Initiating LinOTP authentication.');
 
         $sid = \SimpleSAML_Auth_State::saveState($state, 'linotp2:otp:init');
         $url = SimpleSAML_Module::getModuleURL('linotp2/otp.php');
@@ -144,7 +144,7 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
         .'&pass=' . $escPassword . '&realm=' . $cfg['realm'];
 
         //throw new Exception("url: ". $url);
-        SimpleSAML_Logger::debug("LinOTP2 URL: " . $url);
+        SimpleSAML\Logger::debug("LinOTP2 URL: " . $url);
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, TRUE);
@@ -175,17 +175,19 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
         }
 
         if ( False==$status ) {
-        	/* We got a valid JSON respnse, but the STATUS is false */
-        	SimpleSAML_Logger::info('Valid JSON response, but some internal error occured in LinOTP server.');
-        	return false;
-        } else {
+          /* We got a valid JSON respnse, but the STATUS is false */
+          SimpleSAML\Logger::info('Valid JSON response, but some internal error occured in LinOTP server.');
+          return false;
+        }
+        else {
         	/* The STATUS is true, so we need to check the value */
         	if ( False==$value ) {
-        		SimpleSAML_Logger::info('LinOTP reports invalid OTP for user "'.$username.'".');
-        		return false;
-        	} else {
-        		SimpleSAML_Logger::info('Successful authentication with LinOTP for user "'.$username.'".');
-        		return true;
+            SimpleSAML\Logger::info('LinOTP reports invalid OTP for user "'.$username.'".');
+            return false;
+          }
+          else {
+            SimpleSAML\Logger::info('Successful authentication with LinOTP for user "'.$username.'".');
+            return true;
         	}
         }
         // Fail safe at the end.
@@ -201,7 +203,7 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
     {
         $session = \SimpleSAML_Session::getSessionFromRequest();
         $keyid = $session->getData('linotp2:auth', $session->getAuthority());
-        SimpleSAML_Logger::info('Removing valid LinOTP authentication with data "'.$keyid.'".');
+        SimpleSAML\Logger::info('Removing valid LinOTP authentication with data "'.$keyid.'".');
         $session->deleteData('linotp2:auth', $session->getAuthority());
     }
 }
