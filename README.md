@@ -53,4 +53,4 @@ If you installed SimpleSAMLphp in another way (downloaded package, other reposit
 ## Operation
 
 See this txt file for more detailed configuration:
-https://github.com/codeenigma/linotp2/blob/master/docs/linotp2.txt
+https://github.com/codeenigma/linotp2/blob/master/docs/linotp2.md
