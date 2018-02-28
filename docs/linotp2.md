@@ -88,7 +88,7 @@ To enable this module add the authentication source 'linotp2:linotp2' to 'config
 
 The functionality added by [Code Enigma](https://www.codeenigma.com) is an auth processing filter, which can add an optional step into your authentication process to provide an additional authentication check (2FA). We typically use this with an LDAP login followed by a OTP token check, however it can be combined with any other auth sources to provide an additional check.
 
-To use this filter, add something like this into the `authproc.idp` array in `config/config.php` - note, in this example we are logging into AWS, so the username attribute we use to check the token against LinOTP is 'https://aws.amazon.com/SAML/Attributes/RoleSessionName' - you'll need to know what attribute the username you need to pass to LinOTP is contained within and adjust accordingly:
+To use this filter, add something like this into an appropriate `authproc` array somewhere. In this case we're adding it to the `authproc.idp` array in `config/config.php` which will make it globally available, however you can also add an `authproc` attribute to the metadata array of any IdP or SP. [See the docs for details.](https://simplesamlphp.org/docs/stable/simplesamlphp-authproc#section_1) Note also, in this example we are logging into AWS, so the username attribute we use to check the token against LinOTP is 'https://aws.amazon.com/SAML/Attributes/RoleSessionName' - you'll need to know what attribute the username you need to pass to LinOTP is contained within and adjust accordingly:
 
 ```
     'authproc.idp' => array(
