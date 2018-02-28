@@ -150,7 +150,7 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
         curl_setopt($ch, CURLOPT_HEADER, TRUE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         if ($cfg['sslverifyhost']) {
-        	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
+        	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         } else {
         	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         }
