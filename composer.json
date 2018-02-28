@@ -1,19 +1,21 @@
 {
-    "name": "codeenigma/simplesamlphp-module-linotp-auth-simplesamlphp",
-    "description": "A SimpleSAMLphp module that adds support for LinOTP as an authentication source.",
-    "type": "simplesamlphp-module",
-    "keywords": [ "simplesamlphp", "linotp", "otp" ],
-    "authors": [
-        {
-            "name": "Christian Pommranz",
-            "email": "linotp@keyidentity.com"
-        },
-        {
-            "name": "Greg Harvey",
-            "email": "greg.harvey@gmail.com"
-        }
-    ],
-    "require": {
-        "simplesamlphp/composer-module-installer": "~1.1.5"
-    }
+	"name" : "codeenigma/simplesamlphp-module-linotp2",
+	"description" : "A SimpleSAMLphp module that adds support for LinOTP as an authentication source.",
+	"type" : "simplesamlphp-module",
+	"keywords" : [
+		"simplesamlphp",
+		"linotp",
+		"otp"
+	],
+	"authors" : [{
+			"name" : "Christian Pommranz",
+			"email" : "linotp@keyidentity.com"
+		}, {
+			"name" : "Greg Harvey",
+			"email" : "greg.harvey@gmail.com"
+		}
+	],
+	"require" : {
+		"simplesamlphp/composer-module-installer" : "~1.1.5"
+	}
 }
