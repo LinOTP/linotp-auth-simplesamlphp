@@ -26,7 +26,7 @@ $this->includeAtTemplateBase('includes/header.php');
             <?php
         }
         ?>
-        <p><submit type="submit"><?php echo $this->t('{linotp2:otp:submitbutton}'); ?></submit></p>
+        <p><button type="submit"><?php echo $this->t('{linotp2:otp:submitbutton}'); ?></submit></p>
     </form>
 <?php
 $this->includeAtTemplateBase('includes/footer.php');
