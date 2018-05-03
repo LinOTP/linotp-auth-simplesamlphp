@@ -2,8 +2,8 @@
 /**
  * An authentication processing filter that allows you to use a device registered with
  * a LinOTP server as a second factor.
- * 
- * Most of this code is copied from the 'yubikey' module by 
+ *
+ * Most of this code is copied from the 'yubikey' module by
  * Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  *
  * @author Greg Harvey, Code Enigma <greg.harvey@codeenigma.com>
@@ -17,7 +17,7 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
 	 * The URL of the LinOTP server
 	 */
 	private $linotpserver;
-	
+
 	/**
 	 * The attribute we should use in the $state['Attributes'] array to look up LinOTP username
 	 */
@@ -27,21 +27,21 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
 	 * If the sslcert should be checked
 	 */
 	private $sslverifyhost;
-	
+
 	/**
 	 * If the sslcert should be checked
 	 */
 	private $sslverifypeer;
-	
+
 	/**
 	 * The realm of the user
 	 */
 	private $realm;
-	
+
 	/**
 	 * The attribute map. It is an array
 	 */
-	
+
 	private $attributemap = array();
 
 
@@ -92,6 +92,11 @@ class sspmod_linotp2_Auth_Process_OTP extends SimpleSAML_Auth_ProcessingFilter
             SimpleSAML\Logger::info('Reusing previous OTP authentication with data "'.$key_id.'".');
             return;
         }
+
+				if (isset($state[self::class]['skip_check']) && $state[self::class]['skip_check']) {
+					SimpleSAML\Logger::info('"skip_check" flag found in the auth state. Skipping OTP authentication.');
+					return;
+				}
 
         $state['linotp2:otp'] = array(
             'linotpserver' => $this->linotpserver,
