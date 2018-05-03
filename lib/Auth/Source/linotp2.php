@@ -109,7 +109,7 @@ class sspmod_linotp2_Auth_Source_linotp2 extends sspmod_core_Auth_UserPassBase {
 			.'&pass=' . $escPassword . '&realm=' . $this->realm;
 
 		//throw new Exception("url: ". $url);
-		SimpleSAML_Logger::debug("LinOTP2 URL:" . $url);
+		SimpleSAML\Logger::debug("LinOTP2 URL:" . $url);
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, TRUE);

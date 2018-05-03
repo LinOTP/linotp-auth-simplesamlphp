@@ -1,0 +1,8 @@
+{
+  "intro": {
+    "en": "In order to complete your login, you need to authenticate using a device registered with your LinOTP server. Please enter a valid token from your registered device (e.g. your Google Authenticator code) or, if you have a generating device such as a YubiKey, press it now and the field below will then be filled out automatically with a secure one time password."
+  },
+  "submitbutton": {
+    "en": "Log me in!"
+  }
+}
